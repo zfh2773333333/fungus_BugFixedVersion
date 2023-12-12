@@ -12,7 +12,7 @@ namespace Fungus.EditorUtils
     /// <summary>
     /// Temp hidden object which lets us use the entire inspector window to inspect the block command list.
     /// </summary>
-    public class BlockInspector : ScriptableObject 
+    public class BlockInspector : ScriptableObject
     {
         [FormerlySerializedAs("sequence")]
         public Block block;
@@ -21,7 +21,7 @@ namespace Fungus.EditorUtils
     /// <summary>
     /// Custom editor for the temp hidden object.
     /// </summary>
-    [CustomEditor (typeof(BlockInspector), true)]
+    [CustomEditor(typeof(BlockInspector), true)]
     public class BlockInspectorEditor : Editor
     {
         protected Vector2 blockScrollPos;
@@ -71,7 +71,7 @@ namespace Fungus.EditorUtils
             activeCommandEditor = null;
         }
 
-        public override void OnInspectorGUI () 
+        public override void OnInspectorGUI()
         {
             BlockInspector blockInspector = target as BlockInspector;
             if (blockInspector.block == null)
@@ -162,7 +162,7 @@ namespace Fungus.EditorUtils
 
             if (inspectCommand != null)
             {
-                if (activeCommandEditor == null || 
+                if (activeCommandEditor == null ||
                     !inspectCommand.Equals(activeCommandEditor.target))
                 {
                     // See if we have a cached version of the command editor already,
@@ -201,7 +201,7 @@ namespace Fungus.EditorUtils
             GUI.color = Color.white;
 
             //罪魁祸首 (已优化)
-            if (EditorApplication.isPlaying || (resize && Event.current.type == EventType.MouseDown))
+            if (EditorApplication.isPlaying || (resize && Event.current.type == EventType.MouseDrag))
             {
                 Repaint();
             }
@@ -212,7 +212,7 @@ namespace Fungus.EditorUtils
             Rect cursorChangeRect = new Rect(0, flowchart.BlockViewHeight + 1 + topPanelHeight, EditorGUIUtility.currentViewWidth, 5f);
 
             EditorGUIUtility.AddCursorRect(cursorChangeRect, MouseCursor.ResizeVertical);
-            
+
             if (cursorChangeRect.Contains(Event.current.mousePosition))
             {
                 if (Event.current.type == EventType.MouseDown)
@@ -226,9 +226,9 @@ namespace Fungus.EditorUtils
                 Undo.RecordObject(flowchart, "Resize view");
                 flowchart.BlockViewHeight = Event.current.mousePosition.y - topPanelHeight;
             }
-            
+
             ClampBlockViewHeight(flowchart);
-            
+
             // Stop resizing if mouse is outside inspector window.
             // This isn't standard Unity UI behavior but it is robust and safe.
             if (resize && Event.current.type == EventType.MouseDrag)
@@ -245,7 +245,7 @@ namespace Fungus.EditorUtils
                 resize = false;
             }
         }
-        
+
         protected virtual void ClampBlockViewHeight(Flowchart flowchart)
         {
             // Screen.height seems to temporarily reset to 480 for a single frame whenever a command like 
@@ -255,16 +255,16 @@ namespace Fungus.EditorUtils
             {
                 clamp = false;
             }
-            
+
             if (clamp)
             {
                 // Make sure block view is always clamped to visible area
                 float height = flowchart.BlockViewHeight;
                 height = Mathf.Max(200, height);
-                height = Mathf.Min(windowHeight - 200,height);
+                height = Mathf.Min(windowHeight - 200, height);
                 flowchart.BlockViewHeight = height;
             }
-            
+
             if (Event.current.type == EventType.Repaint)
             {
                 clamp = true;
