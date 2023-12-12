@@ -201,7 +201,7 @@ namespace Fungus.EditorUtils
             GUI.color = Color.white;
 
             //罪魁祸首 (已优化)
-            if (EditorApplication.isPlaying || (resize && Event.current.type == EventType.MouseDrag))
+            if (EditorApplication.isPlaying || resize)
             {
                 Repaint();
             }
