@@ -135,6 +135,7 @@ namespace Fungus.EditorUtils
                 activeCommand = inspectCommand;
             }
 
+            //最吃CPU的方法.
             DrawCommandUI(flowchart, inspectCommand);
         }
 
@@ -189,22 +190,26 @@ namespace Fungus.EditorUtils
 
             // Draw the resize bar after everything else has finished drawing
             // This is mainly to avoid incorrect indenting.
-            Rect resizeRect = new Rect(0, flowchart.BlockViewHeight + topPanelHeight, EditorGUIUtility.currentViewWidth, 4f);
+            Rect resizeRect = new Rect(0, flowchart.BlockViewHeight + topPanelHeight, EditorGUIUtility.currentViewWidth, 5f);
             GUI.color = new Color(0.64f, 0.64f, 0.64f);
             GUI.DrawTexture(resizeRect, EditorGUIUtility.whiteTexture);
             resizeRect.height = 1;
             GUI.color = new Color32(132, 132, 132, 255);
             GUI.DrawTexture(resizeRect, EditorGUIUtility.whiteTexture);
-            resizeRect.y += 3;
+            resizeRect.y += 4;
             GUI.DrawTexture(resizeRect, EditorGUIUtility.whiteTexture);
             GUI.color = Color.white;
 
-            Repaint();
+            //罪魁祸首 (已优化)
+            if (EditorApplication.isPlaying || (resize && Event.current.type == EventType.MouseDown))
+            {
+                Repaint();
+            }
         }
 
         private void ResizeScrollView(Flowchart flowchart)
         {
-            Rect cursorChangeRect = new Rect(0, flowchart.BlockViewHeight + 1 + topPanelHeight, EditorGUIUtility.currentViewWidth, 4f);
+            Rect cursorChangeRect = new Rect(0, flowchart.BlockViewHeight + 1 + topPanelHeight, EditorGUIUtility.currentViewWidth, 5f);
 
             EditorGUIUtility.AddCursorRect(cursorChangeRect, MouseCursor.ResizeVertical);
             
